@@ -8,10 +8,12 @@ const JUMP_VELOCITY = -400.0
 const COYOTE_TIME = 0.1
 const JUMP_BUFFER_TIME = 0.1
 
+# Reference to sprite
+@onready var sprite = $AnimatedSprite2D
+
 # State variables
 var coyote_timer = 0.0
 var jump_buffer_timer = 0.0
-var facing_right = true
 
 func _physics_process(delta: float) -> void:
 	# Apply gravity
@@ -48,14 +50,10 @@ func _physics_process(delta: float) -> void:
 		
 		# Flip sprite based on direction
 		if direction > 0:
-			facing_right = true
-		else:
-			facing_right = false
+			sprite.flip_h = false
+		elif direction < 0:
+			sprite.flip_h = true
 	else:
 		velocity.x = move_toward(velocity.x, 0, FRICTION * delta)
-	
-	# Apply the sprite flip (if you have a Sprite2D child node)
-	if has_node("Sprite2D"):
-		$Sprite2D.flip_h = not facing_right
 	
 	move_and_slide()
